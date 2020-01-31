@@ -20,14 +20,14 @@ $(document).ready(function() {
                         className:'success',
                         sposition:"right top"
                     }
-                  );
+                );
             }
         });
     });
 
     $.ajax({
         type: 'POST',
-        url: '/fetch',
+        url: '/user/fetch',
         dataType: 'json',
         success: function(response) {
             response.forEach(element => {
@@ -41,12 +41,10 @@ $(document).ready(function() {
     });
 
     _delete = (id) => {
-        var user = {
-            userId: id
-        };
+        var user = { userId: id };
         $.ajax({
             type: 'POST',
-            url: '/delete',
+            url: '/user/delete',
             dataType: 'json',
             data: user,
             success: function(response) {
@@ -61,5 +59,4 @@ $(document).ready(function() {
             }
         });
     };
-
 });
