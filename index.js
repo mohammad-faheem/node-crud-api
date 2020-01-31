@@ -30,7 +30,6 @@ app.post('/add', function(req, res) {
         response.id = info.insertId
         console.log(response)
         res.send(response)
-
     })
 })
 
@@ -53,8 +52,8 @@ app.post('/delete', (req, res) => {
     console.log(req.body)
     db._delete('user',{id:req.body.userId}, () => {
         res.json({msg:'recored deleted',
-        responseId:req.body.userId
-    })
+            responseId:req.body.userId
+        })
     })
 })
 
