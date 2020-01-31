@@ -21,12 +21,10 @@ $(document).ready(function() {
                         sposition:"right top"
                     }
                   );
-
             }
         });
     });
 
-    
     $.ajax({
         type: 'POST',
         url: '/fetch',
