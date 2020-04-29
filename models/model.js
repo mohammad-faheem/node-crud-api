@@ -8,39 +8,58 @@ var db = new Db.Adapter({
     reconnectTimeout: 2000
 })
 
-exports._insert = (table, data, callBack) => {
-        if(typeof table !== undefined && data !== '') {
+exports._insert = (table, data) => {
+    if (typeof table !== undefined && data !== '') {
+        var promise = new Promise((resolve, reject) => {
             db.insert(table, data, (err, info) => {
-                callBack(err, info)
-            })
-        }
-    }
 
-exports._select = (table, data = ['*'], condition = null, callBack) => {
-    if(typeof table !== undefined) {
-        db.select(data)}
-        db.where(condition)
-    db.get(table, (err, result, fields) => {
-        callBack(err, result)
-    })
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(info)
+                }
+            })
+        })
+        return promise;
+    }
 }
 
-exports._delete = (table, condition = null, callBack) => {
-    if(typeof table !== undefined) {
-        db.where(condition).delete(table, (err) => {
-            if(err) {
-                console.log(err)
+exports._select = (table, data = ['*'], condition = null) => {
+    if (typeof table !== undefined) {
+        db.select(data)
+    }
+    db.where(condition)
+    var promise = new Promise((resolve, reject) => {
+        db.get(table, (err, result, fields) => {
+            if (result) {
+                resolve(result);
             } else {
-                callBack('data deleted with id')
+                reject(err);
             }
         })
+    })
+    return promise;
+}
+
+exports._delete = (table, condition = null) => {
+    if (typeof table !== undefined) {
+        var promise = new Promise((resolve, reject) => {
+            db.where(condition).delete(table, (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve('data deleted with id')
+                }
+            })
+        })
+        return promise;
     }
 }
 
 exports._update = (table, condition, data, callBack) => {
-    if(typeof table !== undefined) {
+    if (typeof table !== undefined) {
         db.where(condition)._update(table, data, (err) => {
-            if(err) {
+            if (err) {
                 console.log(err)
             } else {
                 callBack(data)
